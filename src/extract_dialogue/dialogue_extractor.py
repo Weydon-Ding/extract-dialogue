@@ -246,36 +246,47 @@ class DialogueExtractor:
     def _parse_and_validate_response(self, response: str) -> List[DialogueItem]:
         """解析并验证API响应"""
         try:
+            # 尝试直接解析
             data = json.loads(response)
-            if not isinstance(data, list):
-                logger.warning("响应不是列表格式，尝试转换")
-                if isinstance(data, dict) and 'script' in data:
-                    data = data['script']
-                else:
-                    return []
-
-            dialogues = []
-            for item in data:
-                if isinstance(item, dict) and 'role' in item and 'dialogue' in item:
-                    dialogue = DialogueItem(
-                        role=str(item['role']).strip(),
-                        dialogue=str(item['dialogue']).strip()
-                    )
-
-                    # 验证内容不为空
-                    if dialogue.role and dialogue.dialogue:
-                        dialogues.append(dialogue)
-                    else:
-                        logger.warning(f"跳过空对话项: {item}")
-                else:
-                    logger.warning(f"跳过无效对话项: {item}")
-
-            return dialogues
-
         except json.JSONDecodeError as e:
-            logger.error(f"JSON解析失败: {e}")
-            logger.debug(f"原始响应: {response}")
-            return []
+            logger.warning(f"JSON解析失败，尝试使用json_repair修复: {e}")
+            try:
+                # 导入并使用Python版本的json_repair
+                from json_repair import repair_json
+                repaired_response = repair_json(response)
+                logger.info("JSON修复成功")
+                logger.debug(f"修复后的JSON: {repaired_response}")
+                data = json.loads(repaired_response)
+            except Exception as repair_error:
+                logger.error(f"JSON修复失败: {repair_error}")
+                logger.debug(f"原始响应: {response}")
+                return []
+
+        # 处理解析后的数据
+        if not isinstance(data, list):
+            logger.warning("响应不是列表格式，尝试转换")
+            if isinstance(data, dict) and 'script' in data:
+                data = data['script']
+            else:
+                return []
+
+        dialogues = []
+        for item in data:
+            if isinstance(item, dict) and 'role' in item and 'dialogue' in item:
+                dialogue = DialogueItem(
+                    role=str(item['role']).strip(),
+                    dialogue=str(item['dialogue']).strip()
+                )
+
+                # 验证内容不为空
+                if dialogue.role and dialogue.dialogue:
+                    dialogues.append(dialogue)
+                else:
+                    logger.warning(f"跳过空对话项: {item}")
+            else:
+                logger.warning(f"跳过无效对话项: {item}")
+
+        return dialogues
 
     def _remove_duplicates(self, dialogues: List[DialogueItem]) -> List[DialogueItem]:
         """移除重复对话"""
