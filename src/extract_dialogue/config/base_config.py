@@ -34,6 +34,11 @@ class Config:
     QUEUE_TIMEOUT = 30  # 队列超时时间（秒）
     BATCH_SIZE = 10  # 批处理大小
 
+    # 速率限制配置
+    RATE_LIMIT_ENABLED = True  # 是否启用速率限制
+    MAX_REQUESTS_PER_MINUTE = 60  # 每分钟最大请求数
+    MAX_REQUESTS_PER_SECOND = 1  # 每秒最大请求数
+
     # 默认行为配置
     DEFAULT_SHOW_STATS = True  # 默认显示统计信息
     DEFAULT_CONCURRENT = True  # 默认使用多线程并发处理

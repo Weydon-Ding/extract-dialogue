@@ -16,7 +16,7 @@ import tiktoken
 from openai import OpenAI
 from tqdm import tqdm
 
-from .config import Config
+from .config import Config, RateLimiter
 from .models import ChunkDialogueItem, DialogueItem, WorkItem
 from .thread_safe_extractor import ThreadSafeDialogueExtractor
 
@@ -65,6 +65,9 @@ class DialogueExtractor:
         # Chunk-id 配置
         self.include_chunk_id = include_chunk_id if include_chunk_id is not None else getattr(Config, 'INCLUDE_CHUNK_ID', True)
         self.save_chunk_text = save_chunk_text if save_chunk_text is not None else getattr(Config, 'SAVE_CHUNK_TEXT', False)
+
+        # 速率限制器
+        self.rate_limiter = RateLimiter()
 
         # 用于去重的集合（仅在单线程模式下使用）
         self.seen_dialogues: Set[DialogueItem] = set()
@@ -218,6 +221,9 @@ class DialogueExtractor:
 
         for attempt in range(Config.MAX_RETRIES):
             try:
+                # 使用速率限制器
+                self.rate_limiter.wait()
+
                 response = self.client.chat.completions.create(
                     model=self.model_name,
                     messages=[

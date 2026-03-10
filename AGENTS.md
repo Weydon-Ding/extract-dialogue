@@ -18,5 +18,11 @@
 ## 输出格式
 @.trae/rules/OUTPUT_FORMAT.md
 
+## 速率限制
+@.trae/rules/RATE_LIMITING.md
+
+## 测试规范
+@.trae/rules/TESTING.md
+
 ## 性能特性
 @.trae/rules/PERFORMANCE.md
