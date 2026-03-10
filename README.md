@@ -9,7 +9,7 @@
 
 ## Show
 
-`repo`：https://github.com/KMnO4-zx/extract-dialogue.git
+`repo`：https://github.com/Weydon-Ding/extract-dialogue.git
 
 本项目利用多平台AI模型从小说中提取对话集，支持DeepSeek、OpenAI、SiliconFlow、Kimi等多个平台。提取的样本中包括`role`和`dialogue`，比如以下的形式：
 
@@ -26,7 +26,7 @@
 
 ## QuickStart
 
-- 克隆仓库并切换目录：`git clone https://github.com/KMnO4-zx/extract-dialogue.git `，`cd extract-dialogue`
+- 克隆仓库并切换目录：`git clone https://github.com/Weydon-Ding/extract-dialogue.git `，`cd extract-dialogue`
 
 - 安装依赖：`pip install -r requirements.txt`
 - 复制环境变量配置文件：`cp env.example .env`
@@ -241,5 +241,5 @@ A: 标准格式包含`chunk_id`和`dialogue_index`字段，便于追踪对话来
 
 ## 联系方式
 
-- 项目主页：https://github.com/KMnO4-zx/extract-dialogue
-- Issues：https://github.com/KMnO4-zx/extract-dialogue/issues
+- 项目主页：https://github.com/Weydon-Ding/extract-dialogue
+- Issues：https://github.com/Weydon-Ding/extract-dialogue/issues
