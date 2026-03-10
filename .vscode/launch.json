@@ -58,6 +58,23 @@
                 "--output", "output.jsonl",
                 "--threads", "2"
             ]
+        },
+        {
+            "name": "Python: 模块 (单线程)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.extract_dialogue",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "args": [
+                "data/test.txt",
+                "--output", "output.jsonl",
+                "--no-concurrent"
+            ]
         }
     ]
 }
